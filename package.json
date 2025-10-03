@@ -1,0 +1,14 @@
+{
+  "name": "ai-gateway-v2",
+  "version": "1.0.0",
+  "description": "Helicone AI Gateway with intelligent routing and fallbacks",
+  "scripts": {
+    "gateway:build": "cd ai-gateway && cargo build --release",
+    "gateway:dev": "cd ai-gateway && cargo run -- --config config.yaml",
+    "gateway:docker": "cd ai-gateway && docker build -t ai-gateway .",
+    "infra:up": "cd ai-gateway/infrastructure && docker compose up -d",
+    "infra:down": "cd ai-gateway/infrastructure && docker compose down",
+    "test": "cd ai-gateway && cargo test"
+  },
+  "packageManager": "pnpm@10.18.0"
+}
