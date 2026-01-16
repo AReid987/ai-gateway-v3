@@ -1,0 +1,12 @@
+{
+  "name": "@ai-gateway/client",
+  "version": "1.0.0",
+  "description": "Reusable Python client for AI Gateway",
+  "main": "src/index.py",
+  "scripts": {
+    "test": "python -m pytest tests/"
+  },
+  "keywords": ["ai", "gateway", "client", "llm"],
+  "license": "Apache-2.0"
+}
+

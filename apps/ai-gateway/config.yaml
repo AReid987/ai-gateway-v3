@@ -1,0 +1,23 @@
+routers:
+  fast:
+    load-balance:
+      chat:
+        models:
+        - groq/deepseek-r1-distill-llama-70b
+        - groq/meta-llama/llama-4-scout-17b-16e-instruct
+        - gemini/gemini-2.0-flash
+        strategy: model-latency
+  main:
+    load-balance:
+      chat:
+        models:
+        - groq/deepseek-r1-distill-llama-70b
+        - groq/meta-llama/llama-4-scout-17b-16e-instruct
+        - groq/meta-llama/llama-4-maverick-17b-128e-instruct
+        - gemini/gemini-2.0-flash
+        - gemini/gemini-1.5-flash
+        - mistral/mistral-small
+        strategy: model-latency
+telemetry:
+  exporter: both
+  level: info,ai_gateway=debug

@@ -1,0 +1,7 @@
+README.md
+setup.py
+src/ai_gateway_claude_flow.egg-info/PKG-INFO
+src/ai_gateway_claude_flow.egg-info/SOURCES.txt
+src/ai_gateway_claude_flow.egg-info/dependency_links.txt
+src/ai_gateway_claude_flow.egg-info/requires.txt
+src/ai_gateway_claude_flow.egg-info/top_level.txt

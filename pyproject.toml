@@ -1,0 +1,71 @@
+[project]
+name = "ai-gateway-v3"
+version = "1.0.0"
+description = "AI Gateway v3 - Turborepo monorepo with Helicone AI Gateway and reusable packages"
+authors = [
+    {name = "Antonio Reid", email = "read.musik@gmail.com"}
+]
+requires-python = ">=3.9"
+readme = "README.md"
+license = {text = "MIT"}
+
+dependencies = [
+    "requests>=2.31.0",
+]
+
+# Editable installs for local packages
+[tool.pdm.editable]
+gateway-client = {path = "./packages/gateway-client", editable = true}
+claude-flow = {path = "./packages/claude-flow", editable = true}
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[tool.pdm.scripts]
+# Gateway scripts
+gateway-build = "cd apps/ai-gateway && cargo build --release"
+gateway-dev = "cd apps/ai-gateway && cargo run -- --config config.yaml"
+gateway-start = "cd apps/ai-gateway && ./target/release/ai-gateway --config config.yaml"
+
+# Test scripts
+test = "pytest packages/*/tests"
+test-structure = "python test_packages_structure.py"
+test-integration = "python test_claude_flow_integration.py"
+test-gateway = "python test_gateway_simple.py"
+
+# Install packages (use uv or pip for editable installs)
+install-packages = {composite = ["uv pip install --system -e ./packages/gateway-client", "uv pip install --system -e ./packages/claude-flow"]}
+install-packages-pip = {composite = ["pip install -e ./packages/gateway-client", "pip install -e ./packages/claude-flow"]}
+
+[tool.black]
+line-length = 100
+target-version = ['py39']
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.pytest.ini_options]
+testpaths = ["packages/*/tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+

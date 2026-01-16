@@ -1,6 +1,32 @@
-# AI Gateway v2 - Dynamic Model Discovery
+# AI Gateway v3 - Turborepo Monorepo
 
 A high-performance AI Gateway built on Helicone's open-source AI Gateway with **dynamic model discovery** that automatically updates available free models daily.
+
+## 📁 Project Structure (Turborepo)
+
+This project follows Turborepo conventions for better organization and reusability:
+
+```
+ai-gateway-v3/
+├── apps/                    # Standalone applications
+│   ├── ai-gateway/          # Helicone AI Gateway (Rust)
+│   ├── docs/                # Documentation site
+│   └── examples/            # Example scripts
+├── packages/                # Reusable packages
+│   ├── gateway-client/      # Python client for AI Gateway
+│   └── claude-flow/         # Claude Flow integration
+├── docs/                    # Documentation
+│   ├── development/         # Development logs
+│   ├── guides/              # User guides (Quick Start, Testing, etc.)
+│   └── reference/           # Reference docs (Claude, Gemini, etc.)
+├── scripts/                 # Utility scripts
+│   ├── discover_models.py   # Model discovery script
+│   └── setup_daily_discovery.sh
+├── package.json            # Root package configuration
+├── pyproject.toml          # PDM configuration
+├── turbo.json              # Turborepo configuration
+└── pnpm-workspace.yaml     # PNPM workspace configuration
+```
 
 ## 🚀 Key Features
 
@@ -47,22 +73,47 @@ python3 scripts/discover_models.py
 
 ## 🚦 Quick Start
 
-### 1. Setup & Start Gateway
+### 1. Install Dependencies
 
 ```bash
-# Install dependencies
-pip install pyyaml requests
+# Install Node.js dependencies
+pnpm install
+
+# Create Python virtual environment
+uv venv
+source .venv/bin/activate  # On macOS/Linux
+# Or on Windows: .venv\Scripts\activate
+
+# Install Python packages (in activated venv)
+uv pip install -e ./packages/gateway-client
+uv pip install -e ./packages/claude-flow
+
+# Or using npm script (in activated venv)
+pnpm run install:packages
+```
+
+> **Important**: Always activate the virtual environment before installing packages or running Python code!
+> See [INSTALLATION.md](INSTALLATION.md) for detailed instructions or [QUICK_REFERENCE.md](QUICK_REFERENCE.md) for quick commands.
+
+### 2. Setup & Start Gateway
+
+```bash
+# Build the gateway
+pnpm run gateway:build
 
 # Setup daily model discovery
 ./scripts/setup_daily_discovery.sh
 
 # Start the gateway
-cd ai-gateway
+cd apps/ai-gateway
 source ~/.zsh_secrets  # Load your API keys
 ./target/release/ai-gateway --config config.yaml
+
+# Or use the npm script
+pnpm run gateway:start
 ```
 
-### 2. Test the Gateway
+### 3. Test the Gateway
 
 ```bash
 # Health check
@@ -85,6 +136,51 @@ curl -X POST http://localhost:8080/ai/chat/completions \
     "messages": [{"role": "user", "content": "Hello!"}],
     "max_tokens": 50
   }'
+```
+
+## 📦 Using the Reusable Packages
+
+### Gateway Client Package (`@ai-gateway/client`)
+
+```python
+from gateway_client import GatewayFactory
+
+# Create a client with balanced routing
+client = GatewayFactory.balanced()
+
+# Make a request
+response = client.chat_completion(
+    model="groq/llama-3.1-8b-instant",
+    messages=[{"role": "user", "content": "Hello!"}],
+    max_tokens=100
+)
+print(response['choices'][0]['message']['content'])
+```
+
+### Claude Flow Package (`@ai-gateway/claude-flow`)
+
+```python
+from claude_flow import Hive, claude_flow_completion
+import asyncio
+
+# Simple completion
+result = claude_flow_completion(
+    "Explain quantum computing in simple terms",
+    model="claude-3-haiku"
+)
+
+# Multi-agent collaboration
+async def run_hive():
+    hive = Hive("research-team")
+    hive.add_agent("researcher", "a thorough researcher")
+    hive.add_agent("analyst", "a critical analyst")
+    hive.add_agent("writer", "a clear technical writer")
+
+    results = await hive.collaborate("Research AI safety best practices")
+    return results
+
+# Run the hive
+results = asyncio.run(run_hive())
 ```
 
 ## 🎛️ Router Configuration

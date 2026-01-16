@@ -1,0 +1,7 @@
+README.md
+setup.py
+src/ai_gateway_client.egg-info/PKG-INFO
+src/ai_gateway_client.egg-info/SOURCES.txt
+src/ai_gateway_client.egg-info/dependency_links.txt
+src/ai_gateway_client.egg-info/requires.txt
+src/ai_gateway_client.egg-info/top_level.txt

@@ -1,14 +1,32 @@
 {
-  "name": "ai-gateway-v2",
+  "name": "ai-gateway-v3",
   "version": "1.0.0",
-  "description": "Helicone AI Gateway with intelligent routing and fallbacks",
+  "private": true,
+  "description": "AI Gateway v3 - Turborepo monorepo with Helicone AI Gateway and reusable packages",
   "scripts": {
-    "gateway:build": "cd ai-gateway && cargo build --release",
-    "gateway:dev": "cd ai-gateway && cargo run -- --config config.yaml",
-    "gateway:docker": "cd ai-gateway && docker build -t ai-gateway .",
-    "infra:up": "cd ai-gateway/infrastructure && docker compose up -d",
-    "infra:down": "cd ai-gateway/infrastructure && docker compose down",
-    "test": "cd ai-gateway && cargo test"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "gateway:build": "cd apps/ai-gateway && cargo build --release",
+    "gateway:dev": "cd apps/ai-gateway && cargo run -- --config config.yaml",
+    "gateway:start": "cd apps/ai-gateway && ./target/release/ai-gateway --config config.yaml",
+    "gateway:docker": "cd apps/ai-gateway && docker build -t ai-gateway .",
+    "infra:up": "cd apps/ai-gateway/infrastructure && docker compose up -d",
+    "infra:down": "cd apps/ai-gateway/infrastructure && docker compose down",
+    "test": "cd apps/ai-gateway && cargo test",
+    "test:python": "python -m pytest packages/*/tests",
+    "install:packages": "uv pip install -e ./packages/gateway-client && uv pip install -e ./packages/claude-flow",
+    "install:packages:pip": "pip install -e ./packages/gateway-client && pip install -e ./packages/claude-flow",
+    "venv:create": "uv venv",
+    "venv:activate": "echo 'Run: source .venv/bin/activate'"
   },
-  "packageManager": "pnpm@10.18.0"
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "pnpm@10.18.0",
+  "devDependencies": {
+    "turbo": "latest",
+    "prettier": "^2.8.8"
+  }
 }
